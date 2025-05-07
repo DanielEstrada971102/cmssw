@@ -28,6 +28,8 @@ void ShowerBuilder::run(edm::Event &iEvent,
                         const DTDigiCollection &digis,
                         ShowerCandidatePtr &showerCandidate_SL1,
                         ShowerCandidatePtr &showerCandidate_SL3) {
+                        // const DTChamber *chamber) {
+  event_number = iEvent.id().event();
   // Clear auxiliars
   clear();
   // Set the incoming hits in the channels
@@ -36,6 +38,9 @@ void ShowerBuilder::run(edm::Event &iEvent,
   std::map<int, ShowerCandidatePtr> aux_showerCands{// defined as a map to easy acces with SL number
                                                     {1, std::make_shared<ShowerCandidate>()},
                                                     {3, std::make_shared<ShowerCandidate>()}};
+
+  // aux_showerCands[1]->rawId(chamber->superLayer(1)->id().rawId());
+  // aux_showerCands[3]->rawId(chamber->superLayer(3)->id().rawId());
 
   int nHits = all_hits.size();
   if (nHits != 0) {
@@ -181,7 +186,6 @@ void ShowerBuilder::processHitsFirmwareEmulation(std::map<int, ShowerCandidatePt
     } else {
       prev_nHits_sl3 = nHits_sl3;
     }
-
     bxStep(bx);
   }
 }
@@ -276,6 +280,7 @@ void ShowerBuilder::fill_bmtl1_buffers() {
     } else if (_hitpbx.second.superLayerId() == 3) {
       bmtl1_sl3_buffer.push_back(_hitpbx);
     }
+    if (debug_) dump_digi_to_file(_hitpbx);
     obdt_buffer.pop_front();
   }
 }
@@ -287,3 +292,25 @@ void ShowerBuilder::bxStep(const int _current_bx) {
   showerb::buffer_clear_olds(bmtl1_sl1_buffer, _current_bx, bmtl1_hits_bxpersistence_);
   showerb::buffer_clear_olds(bmtl1_sl3_buffer, _current_bx, bmtl1_hits_bxpersistence_);
 }
+
+void ShowerBuilder::dump_digi_to_file(showerb::DTPrimPlusBx &hitpbx){
+  DTChamberId chId(hitpbx.second.cameraId());
+  int wh = chId.wheel();
+  int sec = chId.sector();
+  int st = chId.station();
+  int sl = hitpbx.second.superLayerId();
+  int l = hitpbx.second.layerId();
+  int ch = hitpbx.second.channelId();
+  int tdc = hitpbx.second.tdcTimeStamp() % 25 * 32 / 25;
+  int bx = hitpbx.first;
+
+  std::string fileName =
+      "./results/digis_wh" + std::to_string(wh) + "_sc" + std::to_string(sec) + "_st" + std::to_string(st) + ".txt";
+  std::ofstream file(fileName, std::ios::app);
+
+  file << sl << " " << bx << " " << tdc << " " << l << " " << ch << " " << event_number << "\n";
+
+  file.close();
+  std::cout << "Dumped hit to file: " << fileName << std::endl;
+}
+
