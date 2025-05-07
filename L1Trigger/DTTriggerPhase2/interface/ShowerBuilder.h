@@ -127,7 +127,8 @@ public:
                      const edm::EventSetup& iEventSetup,
                      const DTDigiCollection& digis,
                      ShowerCandidatePtr &showerCandidate_SL1,
-                     ShowerCandidatePtr &showerCandidate_SL3);
+                     ShowerCandidatePtr &showerCandidate_SL3, 
+                     const DTChamber* chamber);
     virtual void finish();
 
 private:
@@ -152,6 +153,11 @@ private:
     void fill_obdt(const int bx);
     void fill_bmtl1_buffers();
     void bxStep(const int _current_bx);
+    void dump_digis_to_file(
+        showerb::ShowerBuffer& buffer, 
+        const int bx, 
+        ShowerCandidatePtr &showerCand
+    );
 
     // Private attributes
     const int showerTaggingAlgo_;
@@ -165,6 +171,7 @@ private:
 
     // auxiliary variables
     DTPrimitives all_hits;
+    int event_number;
     std::map<int, DTPrimitives, std::less<int>> all_hits_perBx;
     showerb::ShowerBuffer obdt_buffer; // Buffer to emulate the OBDT behavior
     showerb::ShowerBuffer hot_wires_buffer; // Buffer to emulate the hot wires behavior

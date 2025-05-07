@@ -32,7 +32,9 @@ void ShowerBuilder::run(Event& iEvent,
                         const EventSetup& iEventSetup,
                         const DTDigiCollection& digis,
                         ShowerCandidatePtr &showerCandidate_SL1,
-                        ShowerCandidatePtr &showerCandidate_SL3) {
+                        ShowerCandidatePtr &showerCandidate_SL3,
+                        const DTChamber* chamber) {
+    event_number = iEvent.id().event();
     // Clear auxiliars
     clear();
     // Set the incoming hits in the channels
@@ -42,6 +44,9 @@ void ShowerBuilder::run(Event& iEvent,
         {1, make_shared<ShowerCandidate>()},
         {3, make_shared<ShowerCandidate>()}
     };
+
+    aux_showerCands[1]->rawId(chamber->superLayer(1)->id().rawId());
+    aux_showerCands[3]->rawId(chamber->superLayer(3)->id().rawId());
 
     int nHits = all_hits.size();
     if  (nHits != 0) {
@@ -187,6 +192,9 @@ void ShowerBuilder::processHitsFirmwareEmulation(std::map<int, ShowerCandidatePt
             prev_nHits_sl3 = nHits_sl3;
         }
 
+        dump_digis_to_file(bmtl1_sl1_buffer, bx, showerCands[1]);
+        dump_digis_to_file(bmtl1_sl3_buffer, bx, showerCands[3]);
+
         bxStep(bx);
     }
 }
@@ -291,6 +299,33 @@ void ShowerBuilder::bxStep(const int _current_bx) {
 }
 
 
+void ShowerBuilder::dump_digis_to_file(
+    showerb::ShowerBuffer& buffer, 
+    const int bx, 
+    ShowerCandidatePtr &showerCand
+) {
+    if (debug_) {
+        // std::cout << "Dumping hits to file" << std::endl;
+        DTSuperLayerId slId(showerCand->getRawId());
+        int wh = slId.wheel();
+        int sec = slId.sector();
+        int st = slId.station();
+        int sl = slId.superlayer();
+        // std::cout << "slId: " << slId << std::endl;
+        // std::cout << "wh: " << wh << " sec: " << sec << " st: " << st << " sl: " << sl << std::endl;
+        DTPrimitives _hits; 
+        showerb::buffer_get_hits(buffer, _hits);
+        
+        std::string fileName = "./results/digis_wh" + std::to_string(wh) + "_sc" + std::to_string(sec) + "_st" + std::to_string(st) + ".txt";
+        std::ofstream file(fileName, std::ios::app);
+        // std::cout << "initialized file" << std::endl;
 
+        for (auto &hit : _hits) {
+            int tdc = hit.tdcTimeStamp() % 25 * 32 / 25; 
+            file << sl << " " << bx << " " << tdc << " " << std::to_string(hit.layerId()) << " " << std::to_string(hit.channelId()) << " " << event_number <<"\n";
+        }
+        file.close();
+    }
+}
 
 
