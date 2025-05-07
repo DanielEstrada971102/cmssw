@@ -186,7 +186,7 @@ void DTTrigPhase2ShowerProd::produce(edm::Event& iEvent, const edm::EventSetup& 
     if (debug_)
       LogDebug("DTTrigPhase2ShowerProd") << "      " << chid << std::endl;
 
-    showerBuilder->run(iEvent, iEventSetup, (*dmit).second, ShowerCandidates[sl1id], ShowerCandidates[sl3id]);
+    showerBuilder->run(iEvent, iEventSetup, (*dmit).second, ShowerCandidates[sl1id], ShowerCandidates[sl3id]);//, chamb);
 
     // Save the rawId of these shower candidates
     ShowerCandidates[sl1id]->rawId(sl1id.rawId());
