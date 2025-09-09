@@ -21,6 +21,7 @@ public:
   void setOrbit(int orb) { orbit_ = orb; }
   void setPayload(double hitTag, int idx) { this->payLoad_[idx] = hitTag; };
   void setChannelId(int channel) { channelId_ = channel; };
+  void setChannelNumber(int channel) { channelNum_ = channel; };
   void setLayerId(int layer) { layerId_ = layer; };
   void setCameraId(int camera) { cameraId_ = camera; };
   void setSuperLayerId(int lay) { superLayerId_ = lay; };
@@ -32,6 +33,7 @@ public:
   const int tdcTimeStampNoOffset() const { return tdcTimeStamp_ - timeCorrection_; };
   const double payLoad(int idx) const { return payLoad_[idx]; };
   const int channelId() const { return channelId_; };
+  const int channelNumber() const { return channelNum_; };
   const int layerId() const { return layerId_; };
   const int cameraId() const { return cameraId_; };
   const int superLayerId() const { return superLayerId_; };
@@ -47,6 +49,7 @@ private:
   int superLayerId_;                 // SL ID
   int layerId_;                      // Layer ID
   int channelId_;                    // Wire number
+  int channelNum_;                   // digi number - unique identifier
   cmsdt::LATERAL_CASES laterality_;  // LEFT, RIGHT, NONE
 
   int timeCorrection_;

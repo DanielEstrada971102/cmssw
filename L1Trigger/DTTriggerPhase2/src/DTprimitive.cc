@@ -12,6 +12,7 @@ DTPrimitive::DTPrimitive() {
   superLayerId_ = -1;
   layerId_ = -1;
   channelId_ = -1;
+  channelNum_ = -1;
   tdcTimeStamp_ = -1;
   orbit_ = -1;
   timeCorrection_ = 0;
@@ -26,6 +27,7 @@ DTPrimitive::DTPrimitive(DTPrimitivePtr& ptr) {
   setTDCTimeStamp(ptr->tdcTimeStamp());
   setOrbit(ptr->orbit());
   setChannelId(ptr->channelId());
+  setChannelNumber(ptr->channelNumber());
   setLayerId(ptr->layerId());
   setCameraId(ptr->cameraId());
   setSuperLayerId(ptr->superLayerId());
@@ -40,6 +42,7 @@ DTPrimitive::DTPrimitive(DTPrimitive* ptr) {
   setTDCTimeStamp(ptr->tdcTimeStamp());
   setOrbit(ptr->orbit());
   setChannelId(ptr->channelId());
+  setChannelNumber(ptr->channelNumber());
   setLayerId(ptr->layerId());
   setCameraId(ptr->cameraId());
   setSuperLayerId(ptr->superLayerId());

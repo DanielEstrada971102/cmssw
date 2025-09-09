@@ -86,6 +86,7 @@ void ShowerBuilder::setInChannels(const DTDigiCollection *digis) {
       auto dtpAux = DTPrimitive();
       dtpAux.setTDCTimeStamp((*digiIt).time());
       dtpAux.setChannelId((*digiIt).wire());
+      dtpAux.setChannelNumber((*digiIt).number()); // digi number to identify
       dtpAux.setLayerId(id.layer());
       dtpAux.setSuperLayerId(id.superlayer());
       dtpAux.setCameraId(id.rawId());
