@@ -67,6 +67,7 @@ dtTriggerPhase2PrimitiveDigis = cms.EDProducer("DTTrigPhase2Prod",
                                                activateBuffer  = cms.bool(False),
                                                superCelltimewidth = cms.double(400), # in nanoseconds
                                                superCellspacewidth = cms.int32(20), # in number of cells: IT MUST BE AN EVEN NUMBER
+                                               unhardcoded_sectorgt12 = cms.bool(False), # to avoid hardcoding sector 13 and 14 to be 4 and 10
                                                )
 
 dtTriggerPhase2PrimitiveDigis.HoughGrouping      = HoughGrouping
