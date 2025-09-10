@@ -190,6 +190,10 @@ private:
   int assignQualityOrder(const metaPrimitive& mP) const;
 
   const std::unordered_map<int, int> qmap_;
+
+  // destrada modification: unhardcoded sector 13 and 14 to be like 4 and 10
+  bool unhardcoded_sectorgt12;
+
 };
 
 namespace {
@@ -267,6 +271,9 @@ DTTrigPhase2Prod::DTTrigPhase2Prod(const ParameterSet& pset)
   activateBuffer_ = pset.getParameter<bool>("activateBuffer");
   superCellhalfspacewidth_ = pset.getParameter<int>("superCellspacewidth") / 2;
   superCelltimewidth_ = pset.getParameter<double>("superCelltimewidth");
+
+  // destrada modification: unhardcoded sector 13 and 14 to be like 4 and 10
+  unhardcoded_sectorgt12 = pset.getParameter<bool>("unhardcoded_sectorgt12");
 
   mpathqualityenhancer_ = std::make_unique<MPSLFilter>(pset);
   mpathqualityenhancerbayes_ = std::make_unique<MPQualityEnhancerFilterBayes>(pset);
@@ -927,10 +934,13 @@ void DTTrigPhase2Prod::produce(Event& iEvent, const EventSetup& iEventSetup) {
       int sectorTP = chId.sector();
       //sectors 13 and 14 exist only for the outermost stations for sectors 4 and 10 respectively
       //due to the larger MB4 that are divided into two.
-      if (sectorTP == 13)
-        sectorTP = 4;
-      if (sectorTP == 14)
-        sectorTP = 10;
+      // destrada modification: FLAG ADDED, I NEED TO DISTINGUISH BETWEEN 4/13 AND 10/14....
+      if (!unhardcoded_sectorgt12) {
+        if (sectorTP == 13)
+          sectorTP = 4;
+        if (sectorTP == 14)
+          sectorTP = 10;
+      }
       sectorTP = sectorTP - 1;
       int sl = 0;
       if (metaPrimitiveIt.quality < LOWLOWQ || metaPrimitiveIt.quality == CHIGHQ) {
@@ -1358,6 +1368,8 @@ void DTTrigPhase2Prod::fillDescriptions(edm::ConfigurationDescriptions& descript
   desc.add<bool>("activateBuffer", false);
   desc.add<double>("superCelltimewidth", 400);
   desc.add<int>("superCellspacewidth", 20);
+  // destrada modification: unhardcoded sector 13 and 14 to be like 4 and 10
+  desc.add<bool>("unhardcoded_sectorgt12", false);
   {
     edm::ParameterSetDescription psd0;
     psd0.addUntracked<bool>("debug", false);
