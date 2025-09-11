@@ -16,6 +16,7 @@ DTPrimitive::DTPrimitive() {
   tdcTimeStamp_ = -1;
   orbit_ = -1;
   timeCorrection_ = 0;
+  orbitCorrection_ = 0;
   laterality_ = NONE;
 
   for (int i = 0; i < PAYLOAD_ENTRIES; i++)
@@ -25,6 +26,7 @@ DTPrimitive::DTPrimitive() {
 DTPrimitive::DTPrimitive(DTPrimitivePtr& ptr) {
   setTimeCorrection(ptr->timeCorrection());
   setTDCTimeStamp(ptr->tdcTimeStamp());
+  setOrbitCorrection(ptr->orbitCorrection());
   setOrbit(ptr->orbit());
   setChannelId(ptr->channelId());
   setChannelNumber(ptr->channelNumber());
@@ -40,6 +42,7 @@ DTPrimitive::DTPrimitive(DTPrimitivePtr& ptr) {
 DTPrimitive::DTPrimitive(DTPrimitive* ptr) {
   setTimeCorrection(ptr->timeCorrection());
   setTDCTimeStamp(ptr->tdcTimeStamp());
+  setOrbitCorrection(ptr->orbitCorrection());
   setOrbit(ptr->orbit());
   setChannelId(ptr->channelId());
   setChannelNumber(ptr->channelNumber());
