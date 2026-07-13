@@ -24,7 +24,7 @@
 //              ---------------------
 //              -- Class Interface --
 //              ---------------------
-
+namespace io_v1 {
 class L1Phase2MuDTShower {
 public:
   //  Constructors

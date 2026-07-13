@@ -50,7 +50,8 @@
   <version ClassVersion="3" checksum="2858706077"/>
  </class>
 
- <class name="L1Phase2MuDTShowerContainer" ClassVersion="3">
+ <class name="L1Phase2MuDTShowerContainer" ClassVersion="4">
+  <version ClassVersion="4" checksum="1691485513"/>
   <version ClassVersion="3" checksum="9565899"/>
  </class>
 
