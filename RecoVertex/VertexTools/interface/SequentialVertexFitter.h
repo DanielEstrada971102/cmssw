@@ -243,8 +243,8 @@ private:
   int theMaxStep;
 
   // FIXME using hard-coded tracker bounds as default instead of taking them from geometry service
-  float trackerBoundsRadius{112.};
-  float trackerBoundsHalfLength{273.5};
+  float trackerBoundsRadius{500.};
+  float trackerBoundsHalfLength{1000.};
 
   edm::ParameterSet thePSet;
   LinearizationPointFinder* theLinP;

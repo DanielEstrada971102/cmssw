@@ -99,8 +99,13 @@ double InvariantMassFromVertex::uncertainty(const LorentzVector& totalP4,
     if ((**rt_i).linearizedTrack()->charge() != 0) {
       a = -(**rt_i).refittedState()->freeTrajectoryState().parameters().magneticFieldInInverseGeV(vertex.position()).z() *
           (**rt_i).refittedState()->freeTrajectoryState().parameters().charge();
-      if (a == 0.)
-        throw cms::Exception("InvariantMassFromVertex", "Field is 0");
+      // if (a == 0.)
+      //   throw cms::Exception("InvariantMassFromVertex", "Field is 0");
+      if (a == 0){
+        a = -(**rt_i).refittedState()->freeTrajectoryState().parameters().magneticFieldInInverseGeV(GlobalPoint(vertex.position())).z() *
+          (**rt_i).refittedState()->freeTrajectoryState().parameters().charge();
+          edm::LogWarning("InvariantMassFromVertex") << "Field is zero (or undefined) at " << vertex.position() << "-> Re-evaluating field at GlobalPoint("<< vertex.position() <<")";
+      }
     } else {
       a = 1;
     }
